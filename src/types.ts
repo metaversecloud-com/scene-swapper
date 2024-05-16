@@ -11,7 +11,9 @@ export interface Credentials {
 }
 
 export type DataObjectType = {
-  position: {
+  currentSceneIndex: number;
+  persistentDroppedAssets: string[];
+  positionOffset: {
     x: number;
     y: number;
   };

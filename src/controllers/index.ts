@@ -1,1 +1,1 @@
-export * from "./swapScene.js";
+export * from "./handleSwapScene.js";

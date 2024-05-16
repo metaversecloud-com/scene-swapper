@@ -1,5 +1,6 @@
-import express, { NextFunction, Request, Response } from "express";
+import express from "express";
 import { getVersion } from "./utils/getVersion.js";
+import { handleSwapScene } from "./controllers/index.js";
 
 const router = express.Router();
 
@@ -9,17 +10,15 @@ router.get("/system/health", (req, res) => {
     status: "OK",
     envs: {
       NODE_ENV: process.env.NODE_ENV,
-      INSTANCE_DOMAIN: process.env.INSTANCE_DOMAIN,
-      INTERACTIVE_KEY: process.env.INTERACTIVE_KEY,
-      S3_BUCKET: process.env.S3_BUCKET,
+      INSTANCE_DOMAIN: process.env.INSTANCE_DOMAIN ? process.env.INSTANCE_DOMAIN : "NOT SET",
+      INTERACTIVE_KEY: process.env.INTERACTIVE_KEY ? process.env.INTERACTIVE_KEY : "NOT SET",
+      INTERACTIVE_SECRET: process.env.INTERACTIVE_SECRET ? "SET" : "NOT SET",
+      APP_URL: process.env.APP_URL ? process.env.APP_URL : "NOT SET",
+      COMMIT_HASH: process.env.COMMIT_HASH ? process.env.COMMIT_HASH : "NOT SET",
     },
   });
 });
 
-// Error handling
-router.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  if (res.headersSent) return next(err);
-  res.status(500).send({ success: false, message: err.message });
-});
+router.post("/swap", handleSwapScene);
 
 export default router;
