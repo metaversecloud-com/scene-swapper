@@ -1,3 +1,4 @@
+import { DroppedAssetInterface } from "@rtsdk/topia";
 export interface Credentials {
   assetId: string;
   displayName: string;
@@ -18,3 +19,7 @@ export type DataObjectType = {
     y: number;
   };
 };
+
+export interface IDroppedAsset extends DroppedAssetInterface {
+  dataObject: DataObjectType;
+}

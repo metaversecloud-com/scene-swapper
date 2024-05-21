@@ -54,7 +54,7 @@ export const handleSwapScene = async (req: Request, res: Response) => {
       }),
     );
 
-    await Promise.allSettled(promises);
+    await Promise.all(promises);
 
     return res.json({ success: true });
   } catch (error) {

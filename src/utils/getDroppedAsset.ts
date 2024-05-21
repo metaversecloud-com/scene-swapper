@@ -1,5 +1,5 @@
 import { DroppedAsset } from "../topiaInit.js";
-import { Credentials } from "../types.js";
+import { Credentials, DataObjectType } from "../types.js";
 import { errorHandler } from "./errorHandler.js";
 
 export const getDroppedAsset = async (credentials: Credentials) => {
@@ -9,7 +9,8 @@ export const getDroppedAsset = async (credentials: Credentials) => {
       credentials: { ...credentials },
     });
 
-    if (!droppedAsset.dataObject) throw "No data object found for this key asset.";
+    const dataObject = droppedAsset.dataObject as DataObjectType;
+    if (!dataObject.positionOffset) throw "No data object found for this key asset.";
 
     return droppedAsset;
   } catch (error) {
