@@ -27,7 +27,7 @@
     "serve": "npx tsc -w & npx nodemon -q build/src/index.js",
     "dev": "npm run build && node build/src/index.js",
     "build": "tsc -p tsconfig.json",
-    "start": "node build/src/index.js",
+    "start": "source commit_info.txt; node build/src/index.js",
     "link-sdk": "yalc link @rtsdk/topia",
     "unlink-sdk": "yalc remove @rtsdk/topia"
   },
