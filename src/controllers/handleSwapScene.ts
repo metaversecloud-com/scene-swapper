@@ -52,6 +52,9 @@ export const handleSwapScene = async (req: Request, res: Response) => {
         sceneDropId,
         sceneId: droppableSceneIds[newSceneIndex],
       }),
+      world.incrementDataObjectValue(`keyAssets.${assetId}.scenesSwappedCount`, 1, {
+        analytics: ["scenesSwappedCount"],
+      }),
     );
 
     await Promise.all(promises);
