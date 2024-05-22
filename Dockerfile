@@ -3,6 +3,6 @@ WORKDIR /app
 ARG REF
 ARG COMMIT_HASH
 ADD . ./
-RUN echo "export REF=$REF" >> commit_info.txt && echo "export COMMIT_HASH=$COMMIT_HASH" >> commit_info.txt
+RUN echo "export REF=$REF" > commit_info.txt && echo "export COMMIT_HASH=$COMMIT_HASH" >> commit_info.txt
 EXPOSE 3000
 ENTRYPOINT [ "npm", "start" ]
