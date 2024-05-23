@@ -13,6 +13,7 @@ export interface Credentials {
 
 export type DataObjectType = {
   currentSceneIndex: number;
+  droppableSceneIds: string[];
   persistentDroppedAssets: string[];
   positionOffset: {
     x: number;

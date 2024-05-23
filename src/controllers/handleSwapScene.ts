@@ -10,12 +10,15 @@ export const handleSwapScene = async (req: Request, res: Response) => {
     const { assetId, interactivePublicKey, sceneDropId, urlSlug } = credentials;
 
     const droppedAsset = await getDroppedAsset(credentials);
-    const { currentSceneIndex, persistentDroppedAssets, positionOffset } = droppedAsset.dataObject as DataObjectType;
+    const {
+      currentSceneIndex = 0,
+      droppableSceneIds,
+      persistentDroppedAssets = [],
+      positionOffset = { x: 0, y: 0 },
+    } = droppedAsset.dataObject as DataObjectType;
 
     const droppedAssetIds = [],
       promises = [];
-
-    const droppableSceneIds = process.env["DROPPABLE_SCENE_IDS"] ? process.env["DROPPABLE_SCENE_IDS"]!.split(",") : [];
 
     const newSceneIndex = droppableSceneIds.length > currentSceneIndex + 1 ? currentSceneIndex + 1 : 0;
 
@@ -52,9 +55,12 @@ export const handleSwapScene = async (req: Request, res: Response) => {
         sceneDropId,
         sceneId: droppableSceneIds[newSceneIndex],
       }),
-      world.incrementDataObjectValue(`keyAssets.${assetId}.scenesSwappedCount`, 1, {
-        analytics: ["scenesSwappedCount"],
-      }),
+      droppedAsset.updateDataObjectValue(
+        {},
+        {
+          analytics: ["sceneSwappedCount"],
+        },
+      ),
     );
 
     await Promise.all(promises);

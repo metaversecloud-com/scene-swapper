@@ -10,7 +10,7 @@ export const getDroppedAsset = async (credentials: Credentials) => {
     });
 
     const dataObject = droppedAsset.dataObject as DataObjectType;
-    if (!dataObject.positionOffset) throw "No data object found for this key asset.";
+    if (!dataObject.droppableSceneIds) throw "No data object found for this key asset.";
 
     return droppedAsset;
   } catch (error) {
