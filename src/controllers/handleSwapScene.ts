@@ -7,7 +7,7 @@ import { World } from "../topiaInit.js";
 export const handleSwapScene = async (req: Request, res: Response) => {
   try {
     const credentials = getCredentials(req.body);
-    const { assetId, interactivePublicKey, sceneDropId, urlSlug } = credentials;
+    const { assetId, sceneDropId, urlSlug } = credentials;
 
     const droppedAsset = await getDroppedAsset(credentials);
     const {
@@ -34,12 +34,7 @@ export const handleSwapScene = async (req: Request, res: Response) => {
     }
 
     if (droppedAssetIds.length > 0) {
-      promises.push(
-        World.deleteDroppedAssets(urlSlug, droppedAssetIds, {
-          interactivePublicKey,
-          interactiveSecret: process.env.INTERACTIVE_SECRET,
-        }),
-      );
+      promises.push(World.deleteDroppedAssets(urlSlug, droppedAssetIds, process.env.INTERACTIVE_SECRET, credentials));
     }
 
     await droppedAsset.updateDataObject(
@@ -51,6 +46,7 @@ export const handleSwapScene = async (req: Request, res: Response) => {
 
     promises.push(
       world.dropScene({
+        allowNonAdmins: true,
         position: { x: droppedAsset.position.x + positionOffset.x, y: droppedAsset.position.y + positionOffset.y },
         sceneDropId,
         sceneId: droppableSceneIds[newSceneIndex],
@@ -58,7 +54,7 @@ export const handleSwapScene = async (req: Request, res: Response) => {
       droppedAsset.updateDataObjectValue(
         {},
         {
-          analytics: ["sceneSwappedCount"],
+          analytics: [{ analyticName: "sceneSwappedCount" }],
         },
       ),
     );
