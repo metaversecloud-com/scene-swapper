@@ -37,13 +37,6 @@ export const handleSwapScene = async (req: Request, res: Response) => {
       promises.push(World.deleteDroppedAssets(urlSlug, droppedAssetIds, process.env.INTERACTIVE_SECRET, credentials));
     }
 
-    await droppedAsset.updateDataObject(
-      { currentSceneIndex: newSceneIndex },
-      {
-        lock: { lockId: `${assetId}-${new Date(Math.round(new Date().getTime() / 10000) * 10000)}`, releaseLock: true },
-      },
-    );
-
     promises.push(
       world.dropScene({
         allowNonAdmins: true,
@@ -52,9 +45,13 @@ export const handleSwapScene = async (req: Request, res: Response) => {
         sceneId: droppableSceneIds[newSceneIndex],
       }),
       droppedAsset.updateDataObject(
-        {},
+        { currentSceneIndex: newSceneIndex },
         {
           analytics: [{ analyticName: "sceneSwappedCount" }],
+          lock: {
+            lockId: `${assetId}-${new Date(Math.round(new Date().getTime() / 10000) * 10000)}`,
+            releaseLock: true,
+          },
         },
       ),
     );
