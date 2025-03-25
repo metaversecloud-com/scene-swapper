@@ -1,11 +1,10 @@
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ path: "../.env" });
 
-import { Topia, DroppedAssetFactory, WorldFactory } from "@rtsdk/topia";
+import { Topia, DroppedAssetFactory, SceneFactory, VisitorFactory, WorldFactory } from "@rtsdk/topia";
 
 const config = {
   apiDomain: process.env.INSTANCE_DOMAIN || "api.topia.io",
-  apiKey: process.env.API_KEY,
   apiProtocol: process.env.INSTANCE_PROTOCOL || "https",
   interactiveKey: process.env.INTERACTIVE_KEY,
   interactiveSecret: process.env.INTERACTIVE_SECRET,
@@ -14,6 +13,8 @@ const config = {
 const myTopiaInstance = new Topia(config);
 
 const DroppedAsset = new DroppedAssetFactory(myTopiaInstance);
+const Scene = new SceneFactory(myTopiaInstance);
+const Visitor = new VisitorFactory(myTopiaInstance);
 const World = new WorldFactory(myTopiaInstance);
 
-export { DroppedAsset, myTopiaInstance, World };
+export { DroppedAsset, myTopiaInstance, Scene, Visitor, World };

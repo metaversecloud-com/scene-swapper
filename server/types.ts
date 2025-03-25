@@ -24,3 +24,15 @@ export type DataObjectType = {
 export interface IDroppedAsset extends DroppedAssetInterface {
   dataObject: DataObjectType;
 }
+
+export type SceneType = {
+  id: string;
+  active: boolean;
+  background: string;
+  created: string;
+  description: string;
+  height: number;
+  name: string;
+  previewImgUrl: string;
+  width: number;
+};
