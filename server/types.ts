@@ -19,6 +19,8 @@ export type DataObjectType = {
     x: number;
     y: number;
   };
+  title: string;
+  description: string;
 };
 
 export interface IDroppedAsset extends DroppedAssetInterface {

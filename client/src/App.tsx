@@ -35,19 +35,6 @@ const App = () => {
     };
   }, [searchParams]);
 
-  // const setInteractiveParams = useCallback(
-  //   ({ profileId, sceneDropId }: InteractiveParams) => {
-  //     dispatch!({
-  //       type: SET_INTERACTIVE_PARAMS,
-  //       payload: {
-  //         profileId,
-  //         sceneDropId,
-  //       },
-  //     });
-  //   },
-  //   [dispatch],
-  // );
-
   const setHasSetupBackend = useCallback(
     (success: boolean) => {
       dispatch!({
@@ -65,18 +52,9 @@ const App = () => {
       .finally(() => setHasInitBackendAPI(true));
   };
 
-  // useEffect(() => {
-  //   if (interactiveParams.assetId) {
-  //     setInteractiveParams({
-  //       ...interactiveParams,
-  //     });
-  //   }
-  // }, [interactiveParams, setInteractiveParams]);
-
   useEffect(() => {
     if (!hasInitBackendAPI) setupBackend();
   }, [hasInitBackendAPI]);
-  // }, [hasInitBackendAPI, interactiveParams]);
 
   return (
     <Routes>
