@@ -8,6 +8,7 @@ import { GlobalDispatchContext, GlobalStateContext } from "@/context/GlobalConte
 
 // utils
 import { backendAPI, setErrorMessage } from "@/utils";
+import { getFact } from "../utils/getFact";
 
 const Home = () => {
   const dispatch = useContext(GlobalDispatchContext);
@@ -19,7 +20,7 @@ const Home = () => {
   const [scenes, setScenes] = useState<{ id: string; name: string; description: string; previewImgUrl: string }[]>([]);
   const [selectedSceneId, setSelectedSceneId] = useState("");
   const [title, setTitle] = useState("Scene Swapper");
-  const [description, setDescription] = useState("Default description");
+  const [description, setDescription] = useState();
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
   useEffect(() => {
@@ -62,11 +63,10 @@ const Home = () => {
 
       <PageContainer isLoading={isLoading}>
         <>
-          <h1 className="h2">{title}</h1>
-          <p>{description}</p>
-
-          {isAdmin && (
+          {isAdmin ? (
             <>
+              {title && <h1 className="h2">{title}</h1>}
+              {description && <p>{description}</p>}
               <div className="mt-4">
                 {scenes?.map((scene) => (
                   <div key={scene.id} className="mb-2" onClick={() => setSelectedSceneId(scene.id)}>
@@ -96,6 +96,11 @@ const Home = () => {
                 </button>
               </PageFooter>
             </>
+          ) : (
+            <div className="m-6 text-center">
+              <div style={{ fontSize: 60 }}>🔮</div>
+              {getFact()}
+            </div>
           )}
         </>
       </PageContainer>

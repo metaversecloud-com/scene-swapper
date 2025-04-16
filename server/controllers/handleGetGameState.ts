@@ -15,7 +15,7 @@ export const handleGetGameState = async (req: Request, res: Response) => {
     if (!isAdmin) return res.json({ isAdmin, success: true });
 
     const droppedAsset = await DroppedAsset.get(assetId, urlSlug, { credentials });
-    const { currentSceneIndex, droppableSceneIds } = droppedAsset.dataObject as DataObjectType;
+    const { currentSceneIndex, droppableSceneIds, title, description } = droppedAsset.dataObject as DataObjectType;
 
     let scenes: SceneType[] = [];
 
@@ -36,7 +36,14 @@ export const handleGetGameState = async (req: Request, res: Response) => {
       });
     }
 
-    return res.json({ isAdmin: true, scenes, selectedSceneId: droppableSceneIds[currentSceneIndex], success: true });
+    return res.json({
+      isAdmin: true,
+      scenes,
+      selectedSceneId: droppableSceneIds[currentSceneIndex],
+      title,
+      description,
+      success: true,
+    });
   } catch (error) {
     return errorHandler({
       error,
