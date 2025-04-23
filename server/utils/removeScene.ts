@@ -27,9 +27,7 @@ export const removeScene = async (credentials: Credentials, persistentDroppedAss
     }
 
     if (droppedAssetIds.length > 0) {
-      await World.deleteDroppedAssets(urlSlug, droppedAssetIds, process.env.INTERACTIVE_SECRET!, {
-        interactivePublicKey,
-      });
+      await World.deleteDroppedAssets(urlSlug, droppedAssetIds, process.env.INTERACTIVE_SECRET!, credentials);
     }
   } catch (error) {
     return errorHandler({
