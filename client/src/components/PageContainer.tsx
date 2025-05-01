@@ -20,7 +20,7 @@ export const PageContainer = ({
   if (isLoading) return <Loading />;
 
   return (
-    <div className="p-4">
+    <div className="p-4 mb-28">
       {headerText && (
         <div className="pb-6">
           <h2>{headerText}</h2>
