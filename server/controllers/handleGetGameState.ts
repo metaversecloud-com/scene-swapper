@@ -17,24 +17,24 @@ export const handleGetGameState = async (req: Request, res: Response) => {
     const droppedAsset = await DroppedAsset.get(assetId, urlSlug, { credentials });
     const { currentSceneIndex, droppableSceneIds, title, description } = droppedAsset.dataObject as DataObjectType;
 
-    let scenes: SceneType[] = [];
+    const results = await Promise.allSettled(droppableSceneIds.map((sceneId) => Scene.get(sceneId, { credentials })));
 
-    for (const sceneId of droppableSceneIds) {
-      const scene = await Scene.get(sceneId, { credentials });
-      const sceneData = scene as unknown as SceneType;
-
-      scenes.push({
-        id: sceneId,
-        active: sceneData.active,
-        background: sceneData.background,
-        created: sceneData.created,
-        description: sceneData.description,
-        height: sceneData.height,
-        name: sceneData.name,
-        previewImgUrl: sceneData.previewImgUrl,
-        width: sceneData.width,
+    const scenes: SceneType[] = results
+      .filter((result) => result.status === "fulfilled")
+      .map((result) => {
+        const scene = result.value as unknown as SceneType;
+        return {
+          id: scene.id,
+          active: scene.active,
+          background: scene.background,
+          created: scene.created,
+          description: scene.description,
+          height: scene.height,
+          name: scene.name,
+          previewImgUrl: scene.previewImgUrl,
+          width: scene.width,
+        };
       });
-    }
 
     return res.json({
       isAdmin: true,
