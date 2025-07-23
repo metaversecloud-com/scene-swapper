@@ -1,6 +1,12 @@
 import express from "express";
 import { getVersion } from "./utils/getVersion.js";
-import { handleGetGameState, handleRemoveScene, handleReplaceScene, handleSwapScene } from "./controllers/index.js";
+import {
+  handleGetGameState,
+  handleRemoveScene,
+  handleReplaceScene,
+  handleSwapScene,
+  handleUpdateAllowNonAdmins,
+} from "./controllers/index.js";
 
 const router = express.Router();
 
@@ -26,6 +32,7 @@ router.get("/system/health", (req, res) => {
 router.get("/game-state", handleGetGameState);
 router.post("/replace-scene", handleReplaceScene);
 router.post("/remove-scene", handleRemoveScene);
+router.post("/allow-non-admins", handleUpdateAllowNonAdmins);
 
 // webhooks
 router.post("/swap", handleSwapScene);
