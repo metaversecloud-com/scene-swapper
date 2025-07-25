@@ -6,8 +6,8 @@ export const PageFooter = ({ children }: { children: ReactNode }) => {
       style={{
         position: "fixed",
         bottom: 0,
-        width: "90%",
-        padding: 20,
+        padding: "10px 0 20px",
+        background: "rgba(255, 255, 255, 0.8)",
       }}
     >
       {children}

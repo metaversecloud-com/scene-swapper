@@ -108,7 +108,7 @@ const Home = () => {
             <>
               {title && <h1 className="h2">{title}</h1>}
               {description && <p>{description}</p>}
-              <div className="mt-4">
+              <div className="mt-4 mb-10">
                 {scenes?.map((scene) => (
                   <div key={scene.id} className="mb-2" onClick={() => setSelectedSceneId(scene.id)}>
                     <div className={`card small ${selectedSceneId === scene.id ? "success" : ""}`}>
@@ -122,9 +122,8 @@ const Home = () => {
                     </div>
                   </div>
                 ))}
+                {message && <p className="text-danger py-4">{message}</p>}
               </div>
-
-              {message && <p className="text-danger pt-4">{message}</p>}
 
               <PageFooter>
                 {isAdmin && (
