@@ -31,7 +31,15 @@ const Home = () => {
       backendAPI
         .get("/game-state")
         .then((response) => {
-          updateGameState(response.data);
+          const { allowNonAdmins, isAdmin, lastSwappedDate, scenes, selectedSceneId, title, description } =
+            response.data;
+          updateLastSwappedDate(lastSwappedDate);
+          setIsAdmin(isAdmin);
+          setAllowNonAdmins(allowNonAdmins);
+          setScenes(scenes);
+          setSelectedSceneId(selectedSceneId);
+          if (title) setTitle(title);
+          if (description) setDescription(description);
         })
         .catch((error) => setErrorMessage(dispatch, error))
         .finally(() => {
@@ -40,45 +48,12 @@ const Home = () => {
     }
   }, [hasSetupBackend]);
 
-  const updateGameState = (data: {
-    allowNonAdmins: boolean;
-    isAdmin: boolean;
-    lastSwappedDate?: Date;
-    scenes: [];
-    selectedSceneId: string;
-    title?: string;
-    description?: string;
-  }) => {
-    const { allowNonAdmins, isAdmin, lastSwappedDate, scenes, selectedSceneId, title, description } = data;
-    setIsAdmin(isAdmin);
-    setScenes(scenes);
-    setSelectedSceneId(selectedSceneId);
-    if (title) setTitle(title);
-    if (description) setDescription(description);
-    if (!isAdmin && lastSwappedDate) {
-      const lastSwappedDateObj = new Date(lastSwappedDate);
-      const currentDate = new Date();
-      const timeDifference = currentDate.getTime() - lastSwappedDateObj.getTime();
-      const minutesDifference = Math.floor(timeDifference / (1000 * 60));
-      if (minutesDifference >= 30) {
-        setCanSwapScenes(true);
-        setMessage("");
-      } else {
-        setCanSwapScenes(false);
-        setMessage(`Scene recently swapped. Please wait ${30 - minutesDifference} minutes before swapping again.`);
-      }
-    } else {
-      setCanSwapScenes(true);
-    }
-    setAllowNonAdmins(allowNonAdmins);
-  };
-
   const replaceScene = () => {
     setAreButtonsDisabled(true);
     backendAPI
       .post("/replace-scene", { selectedSceneId })
-      .then((response) => {
-        updateGameState(response.data);
+      .then(() => {
+        updateLastSwappedDate(new Date());
       })
       .catch((error) => setErrorMessage(dispatch, error))
       .finally(() => {
@@ -92,6 +67,25 @@ const Home = () => {
       .post("/allow-non-admins", { allowNonAdmins: value })
       .then(() => {})
       .catch((error) => setErrorMessage(dispatch, error));
+  };
+
+  const updateLastSwappedDate = (lastSwappedDate?: Date) => {
+    if (!isAdmin && lastSwappedDate) {
+      const lastSwappedDateObj = new Date(lastSwappedDate);
+      const currentDate = new Date();
+      const timeDifference = currentDate.getTime() - lastSwappedDateObj.getTime();
+      const minutesDifference = Math.floor(timeDifference / (1000 * 60));
+      if (minutesDifference >= 30) {
+        setCanSwapScenes(true);
+        setMessage("");
+      } else {
+        setCanSwapScenes(false);
+        setMessage("Hang tight! Scenes can only be updated every 30 minutes. Please try again soon.");
+        // setMessage(`Scene recently swapped. Please wait ${30 - minutesDifference} minutes before swapping again.`);
+      }
+    } else {
+      setCanSwapScenes(true);
+    }
   };
 
   if (!hasSetupBackend) return <div />;
@@ -112,7 +106,7 @@ const Home = () => {
                 {scenes?.map((scene) => (
                   <div key={scene.id} className="mb-2" onClick={() => setSelectedSceneId(scene.id)}>
                     <div className={`card small ${selectedSceneId === scene.id ? "success" : ""}`}>
-                      <div className="card-image" style={{ height: "auto" }}>
+                      <div className="card-image" style={{ height: "auto", maxHeight: "140px" }}>
                         <img src={scene.previewImgUrl} alt={scene.name} />
                       </div>
                       <div className="card-details">
@@ -142,7 +136,12 @@ const Home = () => {
                   disabled={areButtonsDisabled || !selectedSceneId || !canSwapScenes}
                   onClick={replaceScene}
                 >
-                  Update Scene
+                  <div className={!canSwapScenes ? "tooltip" : ""} style={{ width: "100%" }}>
+                    <div className="tooltip-content" style={{ width: "100%", top: "-60px" }}>
+                      {message}
+                    </div>
+                    Update Scene
+                  </div>
                 </button>
                 {isAdmin && (
                   <button
