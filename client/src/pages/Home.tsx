@@ -107,7 +107,7 @@ const Home = () => {
                   <div key={scene.id} className="mb-2" onClick={() => setSelectedSceneId(scene.id)}>
                     <div className={`card small ${selectedSceneId === scene.id ? "success" : ""}`}>
                       <div className="card-image" style={{ height: "auto", maxHeight: "140px" }}>
-                        <img src={scene.previewImgUrl} alt={scene.name} />
+                        <img src={scene.previewImgUrl} alt={scene.name} style={{ maxHeight: "100%" }} />
                       </div>
                       <div className="card-details">
                         <h4 className="card-title h4">{scene.name}</h4>
