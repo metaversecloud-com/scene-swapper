@@ -13,8 +13,10 @@ export interface Credentials {
 }
 
 export type DataObjectType = {
+  allowNonAdmins: boolean;
   currentSceneIndex: number;
   droppableSceneIds: string[];
+  lastSwappedDate: Date;
   persistentDroppedAssets: string[];
   positionOffset: {
     x: number;

@@ -12,10 +12,19 @@ export const handleGetGameState = async (req: Request, res: Response) => {
     const visitor: VisitorInterface = await Visitor.get(visitorId, urlSlug, { credentials });
     const { isAdmin } = visitor;
 
-    if (!isAdmin) return res.json({ isAdmin, success: true });
-
     const droppedAsset = await DroppedAsset.get(assetId, urlSlug, { credentials });
-    const { currentSceneIndex, droppableSceneIds, title, description } = droppedAsset.dataObject as DataObjectType;
+    if (!droppedAsset.dataObject || Object.keys(droppedAsset.dataObject).length === 0) {
+      throw "Dropped asset data object not found.";
+    }
+
+    const {
+      allowNonAdmins = false,
+      currentSceneIndex,
+      droppableSceneIds,
+      lastSwappedDate,
+      title,
+      description,
+    } = droppedAsset.dataObject as DataObjectType;
 
     const results = await Promise.allSettled(droppableSceneIds.map((sceneId) => Scene.get(sceneId, { credentials })));
 
@@ -37,7 +46,9 @@ export const handleGetGameState = async (req: Request, res: Response) => {
       });
 
     return res.json({
-      isAdmin: true,
+      allowNonAdmins,
+      isAdmin,
+      lastSwappedDate,
       scenes,
       selectedSceneId: droppableSceneIds[currentSceneIndex],
       title,

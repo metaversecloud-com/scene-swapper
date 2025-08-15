@@ -10,6 +10,8 @@ export const handleReplaceScene = async (req: Request, res: Response) => {
 
     await swapScene(credentials, droppedAsset, selectedSceneId);
 
+    await droppedAsset.updateDataObject({ lastSwappedDate: new Date() });
+
     return res.json({ success: true });
   } catch (error) {
     return errorHandler({
