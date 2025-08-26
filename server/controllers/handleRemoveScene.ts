@@ -7,7 +7,7 @@ import { DataObjectType } from "../types.js";
 export const handleRemoveScene = async (req: Request, res: Response) => {
   try {
     const credentials = getCredentials(req.query);
-    const { assetId, profileId, urlSlug, visitorId } = credentials;
+    const { assetId, urlSlug, visitorId } = credentials;
 
     await removeScene(credentials);
 
@@ -19,8 +19,6 @@ export const handleRemoveScene = async (req: Request, res: Response) => {
     visitor.updatePublicKeyAnalytics([
       {
         analyticName: `${allowNonAdmins ? "allowNonAdmins" : "adminsOnly"}-${isAdmin ? "admin" : "nonAdmin"}-updates`,
-        profileId,
-        uniqueKey: profileId,
         urlSlug,
       },
     ]);
