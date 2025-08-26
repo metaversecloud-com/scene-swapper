@@ -1,7 +1,7 @@
-import { World } from "../topiaInit.js";
+import { Visitor, World } from "../topiaInit.js";
 import { errorHandler, removeScene } from "../utils/index.js";
 import { Credentials, DataObjectType } from "../types.js";
-import { DroppedAssetInterface } from "@rtsdk/topia";
+import { DroppedAssetInterface, VisitorInterface } from "@rtsdk/topia";
 
 export const swapScene = async (
   credentials: Credentials,
@@ -9,14 +9,26 @@ export const swapScene = async (
   selectedSceneId?: string,
 ) => {
   try {
-    const { assetId, sceneDropId, urlSlug } = credentials;
+    const { assetId, profileId, sceneDropId, urlSlug, visitorId } = credentials;
 
     const {
+      allowNonAdmins,
       currentSceneIndex = 0,
       droppableSceneIds,
       persistentDroppedAssets = [],
       positionOffset = { x: 0, y: 0 },
     } = droppedAsset.dataObject as DataObjectType;
+
+    const visitor: VisitorInterface = await Visitor.get(visitorId, urlSlug, { credentials });
+    const { isAdmin } = visitor;
+    visitor.updatePublicKeyAnalytics([
+      {
+        analyticName: `${allowNonAdmins ? "allowNonAdmins" : "adminsOnly"}-${isAdmin ? "admin" : "nonAdmin"}-updates`,
+        profileId,
+        uniqueKey: profileId,
+        urlSlug,
+      },
+    ]);
 
     const promises = [];
 
