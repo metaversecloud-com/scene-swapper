@@ -7,10 +7,7 @@ import { DataObjectType, SceneType } from "../types.js";
 export const handleGetGameState = async (req: Request, res: Response) => {
   try {
     const credentials = getCredentials(req.query);
-    const { assetId, urlSlug, visitorId } = credentials;
-
-    const visitor: VisitorInterface = await Visitor.get(visitorId, urlSlug, { credentials });
-    const { isAdmin } = visitor;
+    const { assetId, profileId, urlSlug, visitorId } = credentials;
 
     const droppedAsset = await DroppedAsset.get(assetId, urlSlug, { credentials });
     if (!droppedAsset.dataObject || Object.keys(droppedAsset.dataObject).length === 0) {
@@ -25,6 +22,18 @@ export const handleGetGameState = async (req: Request, res: Response) => {
       title,
       description,
     } = droppedAsset.dataObject as DataObjectType;
+
+    const visitor: VisitorInterface = await Visitor.get(visitorId, urlSlug, { credentials });
+    const { isAdmin } = visitor;
+
+    visitor.updatePublicKeyAnalytics([
+      {
+        analyticName: `${allowNonAdmins ? "allowNonAdmins" : "adminsOnly"}-${isAdmin ? "admin" : "nonAdmin"}-starts`,
+        profileId,
+        uniqueKey: profileId,
+        urlSlug,
+      },
+    ]);
 
     const results = await Promise.allSettled(droppableSceneIds.map((sceneId) => Scene.get(sceneId, { credentials })));
 

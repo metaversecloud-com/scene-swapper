@@ -5,7 +5,7 @@ import { Credentials } from "../types.js";
 
 export const removeScene = async (credentials: Credentials, persistentDroppedAssets?: string[]) => {
   try {
-    const { assetId, interactivePublicKey, sceneDropId, urlSlug } = credentials;
+    const { assetId, sceneDropId, urlSlug } = credentials;
 
     if (!sceneDropId) throw "A sceneDropId is required to remove a scene.";
 
