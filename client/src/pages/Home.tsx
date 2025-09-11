@@ -81,7 +81,6 @@ const Home = () => {
       } else {
         setCanSwapScenes(false);
         setMessage("Hang tight! Scenes can only be updated every 30 minutes. Please try again soon.");
-        // setMessage(`Scene recently swapped. Please wait ${30 - minutesDifference} minutes before swapping again.`);
       }
     } else {
       setCanSwapScenes(true);
