@@ -33,13 +33,14 @@ const Home = () => {
         .then((response) => {
           const { allowNonAdmins, isAdmin, lastSwappedDate, scenes, selectedSceneId, title, description } =
             response.data;
-          updateLastSwappedDate(lastSwappedDate);
           setIsAdmin(isAdmin);
           setAllowNonAdmins(allowNonAdmins);
           setScenes(scenes);
           setSelectedSceneId(selectedSceneId);
           if (title) setTitle(title);
           if (description) setDescription(description);
+
+          updateLastSwappedDate(lastSwappedDate);
         })
         .catch((error) => setErrorMessage(dispatch, error))
         .finally(() => {
