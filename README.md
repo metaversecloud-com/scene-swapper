@@ -14,7 +14,14 @@ Scene Swapper is an on-canvas application allowing users to swap scenes by click
 
 - Key Asset: the data object attached to the dropped key asset stores the default and currently displayed scene.
 
-## Developers:
+## Developers
+
+### Built With
+
+#### Server
+
+![Node.js](https://img.shields.io/badge/node.js-%2343853D.svg?style=for-the-badge&logo=node.js&logoColor=white)
+![Express](https://img.shields.io/badge/express-%23000000.svg?style=for-the-badge&logo=express&logoColor=white)
 
 ### Add your .env environmental variables
 
@@ -33,8 +40,10 @@ SCENE_IDS=xxxxxxxxxxxxxx,xxxxxxxxxxxxxx,xxxxxxxxxxxxxx
 
 [Topia Production Account Dashboard](https://topia.io/t/dashboard/integrations)
 
+### Implementation Requirements
+
+The `SCENE_IDS` environment variable should contain a comma-separated list of scene IDs that the asset will cycle through when clicked.
+
 ### Helpful links
 
 - [SDK Developer docs](https://metaversecloud-com.github.io/mc-sdk-js/index.html)
-- [View it in action!](topia.io/bulletin-board-prod)
-- [Notion One Pager](https://www.notion.so/topiaio/Bulletin-Board-18171cde990b447693aee8b26b03f872?pvs=4)
