@@ -38,7 +38,7 @@ export const handleGetGameState = async (req: Request, res: Response) => {
     const results = await Promise.allSettled(droppableSceneIds.map((sceneId) => Scene.get(sceneId, { credentials })));
 
     const scenes: SceneType[] = results
-      .filter((result) => result.status === "fulfilled")
+      .filter((result): result is PromiseFulfilledResult<any> => result.status === "fulfilled")
       .map((result) => {
         const scene = result.value as unknown as SceneType;
         return {
