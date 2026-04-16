@@ -65,3 +65,4 @@ oauth2.keys.json
 build/
 
 Dockerfile.local
+/server/dist
