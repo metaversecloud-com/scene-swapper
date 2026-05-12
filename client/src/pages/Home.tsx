@@ -111,7 +111,10 @@ const Home = () => {
                       </div>
                       <div className="card-details overflow-hidden">
                         <div className="tooltip max-w-full">
-                          <span className="tooltip-content p3 min-w-[150px]" style={{ top: 0 }}>
+                          <span
+                            className="tooltip-content p3 min-w-[120px]"
+                            style={{ top: 0, left: 0, transform: "none" }}
+                          >
                             {scene.name}
                           </span>
                           <h4 className="card-title truncate">{scene.name}</h4>
