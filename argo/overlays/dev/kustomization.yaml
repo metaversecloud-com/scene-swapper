@@ -1,17 +1,14 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-
 # No `namespace:` directive: the interceptor Ingress must stay in `keda`; the
 # workload resources carry no namespace and Argo injects the Application's
 # destination namespace (sdk-apps-dev).
-
 resources:
   - ../../services/scene-sw0
   - scene-sw0-config.yaml
   - scene-sw0-sealedsecret.yaml
   - scene-sw0-httpscaledobject.yaml
   - scene-sw0-interceptor-ingress.yaml
-
 patches:
   # Drop the direct ALB Ingress: in dev the app is fronted through the KEDA
   # interceptor so a scaled-to-zero Deployment is woken by the first request.
@@ -24,10 +21,9 @@ patches:
       kind: Ingress
       metadata:
         name: scene-sw0
-
 # Per-service image (defaults to the shared dev ECR sdk-example:<repo>; an
 # independent deployment may pin a different tag/image).
 images:
   - name: scene-sw0
     newName: 368076259134.dkr.ecr.us-east-1.amazonaws.com/sdk-example
-    newTag: scene-swapper
+    digest: sha256:1cf091c7ff8a6e7f1fc9f487de95937ef82f9a3405b2274b3f6217d8968f4830
