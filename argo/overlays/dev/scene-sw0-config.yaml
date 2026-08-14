@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: scene-sw0-config
+  labels:
+    app.kubernetes.io/name: scene-sw0
+data:
+  PORT: '3000'
+  NODE_ENV: 'production'
+  INSTANCE_DOMAIN: 'api.topia.io'
+  INTERACTIVE_KEY: 'ivJ7Ta0Vv9ibX21rhkTr'

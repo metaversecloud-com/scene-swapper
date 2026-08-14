@@ -109,8 +109,16 @@ const Home = () => {
                       <div className="card-image">
                         <img src={scene.previewImgUrl} alt={scene.name} style={{ maxHeight: "100%" }} />
                       </div>
-                      <div className="card-details">
-                        <h4 className="card-title h4">{scene.name}</h4>
+                      <div className="card-details overflow-hidden">
+                        <div className="tooltip max-w-full">
+                          <span
+                            className="tooltip-content p3 min-w-[120px]"
+                            style={{ top: 0, left: 0, transform: "none" }}
+                          >
+                            {scene.name}
+                          </span>
+                          <h4 className="card-title truncate">{scene.name}</h4>
+                        </div>
                         <p className="card-details">{scene.description}</p>
                       </div>
                     </div>
