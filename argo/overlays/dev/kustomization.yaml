@@ -27,3 +27,4 @@ images:
   - name: scene-sw0
     newName: 368076259134.dkr.ecr.us-east-1.amazonaws.com/sdk-example
     digest: sha256:e165a647b160541cefc5ed3f196389c51b4376b1d1725cf1f519c97a83a81fe7
+    newTag: scene-swapper
