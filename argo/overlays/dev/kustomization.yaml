@@ -26,5 +26,5 @@ patches:
 images:
   - name: scene-sw0
     newName: 368076259134.dkr.ecr.us-east-1.amazonaws.com/sdk-example
-    digest: sha256:e165a647b160541cefc5ed3f196389c51b4376b1d1725cf1f519c97a83a81fe7
+    digest: sha256:3b7b9b42ee34465280771112961ba5b85afc44b40e1a0cd843f40550a536827d
     newTag: scene-swapper
