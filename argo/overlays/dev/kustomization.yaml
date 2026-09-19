@@ -8,7 +8,6 @@ resources:
   - scene-sw0-config.yaml
   - scene-sw0-sealedsecret.yaml
   - scene-sw0-httpscaledobject.yaml
-  - scene-sw0-interceptor-ingress.yaml
 patches:
   # Drop the direct ALB Ingress: in dev the app is fronted through the KEDA
   # interceptor so a scaled-to-zero Deployment is woken by the first request.
