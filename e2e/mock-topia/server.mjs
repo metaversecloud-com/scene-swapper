@@ -365,6 +365,18 @@ const routes = [
     },
   ],
 
+  // Scene.get / fetchSceneById (handleGetSceneById): scenes are platform-wide, seeded per world under `scenes`
+  // and read from the caller's world (JWT urlSlug). Like getSceneById, an unknown id answers 200 with a null
+  // body, not a 404.
+  [
+    "GET",
+    /^\/api\/v1\/scenes\/([^/]+)$/,
+    ([sceneId], _, __, world) => {
+      const scene = world?.scenes?.[sceneId];
+      return [200, scene ? { ...clone(scene), id: sceneId } : null];
+    },
+  ],
+
   // User.checkInteractiveCredentials (handleCheckInteractiveCredentials behind interactiveKeyValidator with
   // isRequired): 200 when the caller's InteractiveJWT carries complete session credentials, else 401.
   [
@@ -491,17 +503,6 @@ const routes = [
       target.assets[id] = { id, uniqueName: `scene-${body.sceneId}`, sceneId: body.sceneId, sceneDropId, position: body.position, dataObject: {} };
       target.events.push({ ...body, type: "drop-scene", assetId: id, sceneDropId });
       return [200, { sceneDropId, success: true }];
-    },
-  ],
-
-  [
-    "GET",
-    /^\/api\/v1\/scenes\/([^/]+)$/,
-    ([sceneId], _, __, world) => {
-      // Scene.get / fetchSceneById (handleGetSceneById): the scene's details from the caller's world's seeded
-      // `scenes`. Like getSceneById, a scene that doesn't exist answers 200 with a null body.
-      const scene = world?.scenes?.[sceneId];
-      return [200, scene ? { id: sceneId, active: true, ...scene } : null];
     },
   ],
 
@@ -991,7 +992,11 @@ const server = http.createServer(async (req, res) => {
     // Like the public API, world-scoped calls need an API key or a visitor's interactive JWT. Without
     // this, an app that forwards missing credentials to the SDK would pass against the mock. So does
     // public-key-analytics (the real route runs interactiveKeyValidator + gameEngineValidator).
-    const needsSession = url.pathname.startsWith("/api/v1/world/") || url.pathname === "/api/v1/analytics/public-key-analytics";
+    // So does GET /scenes/:id (interactiveKeyValidator + globalApiValidator).
+    const needsSession =
+      url.pathname.startsWith("/api/v1/world/") ||
+      url.pathname.startsWith("/api/v1/scenes/") ||
+      url.pathname === "/api/v1/analytics/public-key-analytics";
     if (needsSession && !req.headers.authorization && !jwtNonce(req.headers.interactivejwt)) {
       return send(res, 401, { message: "Missing API key or interactive JWT with an interactiveNonce" });
     }
