@@ -55,10 +55,14 @@ export type SeedOptions = {
   userGroupDataObjects?: Array<Record<string, unknown>>;
   /** Extra fields for GET /world-details (World.fetchDetails); default { urlSlug, name, width, height }. */
   worldDetails?: Record<string, unknown>;
-  /** Scenes GET /scenes/:id (Scene.get) knows, keyed by scene id; unknown ids answer null like the real API. */
-  scenes?: Record<string, Record<string, unknown>>;
-  /** Further dropped assets in the world, keyed by id. */
+  /** Further dropped assets in the world, keyed by id (their `id` defaults to the key). */
   extraAssets?: Record<string, Record<string, unknown>>;
+  /**
+   * Scenes GET /scenes/:sceneId (Scene.get / fetchSceneById) knows, keyed by scene id (their `id` is the key).
+   * Read from the caller's world (the InteractiveJWT's urlSlug); an unknown id answers 200 with a null body,
+   * like the real getSceneById.
+   */
+  scenes?: Record<string, Record<string, unknown>>;
   /** Delay for every public-API call into the world, so concurrent requests overlap. */
   latencyMs?: number;
   /**
@@ -153,15 +157,17 @@ export class TopiaWorld {
     expressions,
     worldDetails,
     userGroupDataObjects,
-    scenes,
     extraAssets = {},
+    scenes,
     latencyMs = 0,
     delays = {},
     failures = {},
     holdLocksDuringDelay = false,
   }: SeedOptions = {}) {
     this.others = otherVisitors;
-    const assets: Record<string, any> = { ...extraAssets };
+    const assets: Record<string, any> = Object.fromEntries(
+      Object.entries(extraAssets).map(([id, fields]) => [id, { id, ...fields }]),
+    );
     if (withAsset) {
       assets[this.assetId] = {
         id: this.assetId,
