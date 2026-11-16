@@ -71,7 +71,6 @@ test("an admin's swap to the asset's own scene is accepted from the API", async 
 });
 
 test("the webhook refuses a body without session credentials", async ({ request, world }) => {
-  test.fail(true, "EXP-469: /swap answers success when it did nothing");
   await seedSwapper(world, { isAdmin: true });
 
   const response = await request.post("/api/swap", { data: {} });
